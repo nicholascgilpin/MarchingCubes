@@ -2,32 +2,70 @@
 <html>
   <head>
     <script type="text/javascript" src="marchingCubes.js"></script>
-  </head>
+	<!-- Twitter Bootstrap -->
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+ </head>
   <body>
-    <h1>Marching Cubes</h1>
-    <p>
-      Marching cubes is an algorithm which transforms a shape format into a polygon format. The animation below demonstrates the different stages of the marching cube animation in 2D.
-    </p>
-    <h3>Animation</h3>
-    <canvas id="c1" style="border:1px solid #d3d3d3;">
-    Your browser does not support the HTML5 canvas tag.</canvas>
-    <h3>2D Algorithm</h3>
-    <ol>
-      <li>A Shape is created</li>
-      <li>Overlay a grid on the shape</li>
-      <li>Select the verticies inside the shape</li>
-      <li>Generate mid-points based on vertex cases</li>
-      <li>Draw lines between the generated points</li>
-    </ol>
-    <div class="bib">
-      <h3>
-        Bibliography
-      </h3>
-      <p>
-        <a href="http://www.cs.carleton.edu/cs_comps/0405/shape/marching_cubes.html">
-        Marching Cubes Paper</a>
-      </p>
-    </div>
+	<div class="container">
+		<div class="row center-block">
+			<h1>Marching Cubes</h1>
+			<p>
+			  Marching cubes is an algorithm which transforms a shape format into a polygon format. The animation below demonstrates the different stages of the marching cube animation in 2D.
+			</p>
+			<p>
+			  The goal for this site is to provide a demonstration which illistrates how the marching cubes algorithm works. 
+			</p>
+			<h3>Animation</h3>
+			<canvas id="c1" style="border:1px solid #d3d3d3;">
+			Your browser does not support the HTML5 canvas tag.</canvas>
+			<h3>2D Algorithm</h3>
+			<ol>
+			  <li>A Shape is created</li>
+			  <li>Overlay a grid on the shape</li>
+			  <li>Select the verticies inside the shape</li>
+			  <li>Generate mid-points based on vertex cases</li>
+			  <li>Draw lines between the generated points</li>
+			</ol>
+			<h3>Challenges</h3>
+			<ul>
+				<li>Detection of line intersection</li>
+				<li>Determining the vertex cases</li>
+			</ul>
+		</div>
+		<div class="row center-block">
+		  <h3>
+		  Project Timeline
+		  </h3>
+		  	<ol>
+			  <li>Done: Review Marching Cube Algorithm</li>
+			  <li>Done: A Shape is created</li>
+			  <li>Done: Overlay a grid on the shape</li>
+			  <li>In Progres: Select the verticies inside the shape</li>
+			  <ol>
+				<li>In Progres: Detect intersection of equation and ray</li>
+				<li>Count intersections, even is outside and odd is inside</li>
+			  </ol>
+			  <li>Marching Cubes</li>
+			  <ol>
+				<li>Group grid into cubes</li>
+				<li>Select verticies in shape</li>
+				<li>Generate halfway point based on vertex cases</li>
+				<li>Connct Halfway Points</li>
+			  </ol>
+			  <li>Draw the intermediate steps to create an animation</li>
+			</ol>
+		  <h3>
+			Bibliography
+		  </h3>
+		  <p>
+			<a href="http://www.cs.carleton.edu/cs_comps/0405/shape/marching_cubes.html">
+			Marching Cubes Paper</a>
+		  </p>
+		</div>
+	</div>
 
     <script>
       //Send HTML Canvas info to javascript
