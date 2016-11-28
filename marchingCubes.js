@@ -10,27 +10,13 @@ Timeline:
     draw polygonalization
 */
 // Global Variables
-var context = {}
-var canvas = {}
-var shape = {}
-function createGrid(width,height,canvasIn){
-  canvas = canvasIn
-  canvas.width = width
-  canvas.height = height
-  context = canvas.getContext("2d");
-}
+var canvas = document.querySelector('#paint');
+var ctx = canvas.getContext('2d');
 
-function drawCircle(x,y,r){
-  context.beginPath()
-  // x,y,r,startingAngle,FinishAngle
-  context.arc(x,y,r,0,2*Math.PI)
-  context.stroke()
-  var c
-  c.x = x
-  c.y = y
-  c.r = r
-  return c
-}
+var sketch = document.querySelector('#sketch');
+var sketch_style = getComputedStyle(sketch);
+canvas.width = parseInt(sketch_style.getPropertyValue('width'));
+canvas.height = parseInt(sketch_style.getPropertyValue('height'));
 
 // Determines if a point with within a closed shape
 function pointInShape(point,shape){
@@ -44,6 +30,40 @@ function marchingCubes(){
   // select half way point
   // draw polygonalization
 }
+
+// Painting Code //////////////////////////////////////////////////////////////
+/* Painting code based on a tutorial by Rishabh
+http://codetheory.in/creating-a-paint-application-with-html5-canvas/
+*/
+var mouse = {x: 0, y: 0};
+var geometryLayer  = [] // Stores geometric information for later manipulation
+ctx.lineWidth = 1;
+ctx.fillStyle = 'black';
+ctx.strokeStyle = 'black';
+
+var onPaint = function() {
+    geometryLayer.push([mouse.x,mouse.y]);
+    ctx.arc(mouse.x, mouse.y, 10, 0, 2 * Math.PI, false);
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
+};
+
+/* Mouse Capturing Work */
+canvas.addEventListener('mousemove', function(e) {
+  mouse.x = e.pageX - canvas.offsetLeft-15;
+  mouse.y = e.pageY - canvas.offsetTop-15;
+}, false);
+
+canvas.addEventListener('mousedown', function(e) {
+    ctx.beginPath();
+    ctx.moveTo(mouse.x, mouse.y);
+    canvas.addEventListener('mousemove', onPaint, false);
+}, false);
+
+canvas.addEventListener('mouseup', function() {
+    canvas.removeEventListener('mousemove', onPaint, false);
+}, false);
 
 function mainJS(canvas){
   createGrid(100,100,canvas)

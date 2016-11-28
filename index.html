@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript" src="marchingCubes.js"></script>
 	<!-- Twitter Bootstrap -->
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -16,11 +15,12 @@
 			  Marching cubes is an algorithm which transforms a shape format into a polygon format. The animation below demonstrates the different stages of the marching cube animation in 2D.
 			</p>
 			<p>
-			  The goal for this site is to provide a demonstration which illistrates how the marching cubes algorithm works. 
+			  The goal for this site is to provide a demonstration which illistrates how the marching cubes algorithm works.
 			</p>
 			<h3>Animation</h3>
-			<canvas id="c1" style="border:1px solid #d3d3d3;">
-			Your browser does not support the HTML5 canvas tag.</canvas>
+      <div id="sketch">
+        <canvas id="paint" width="200" height="200"></canvas>
+      </div>
 			<h3>2D Algorithm</h3>
 			<ol>
 			  <li>A Shape is created</li>
@@ -63,18 +63,9 @@
 		  <p>
 			<a href="http://www.cs.carleton.edu/cs_comps/0405/shape/marching_cubes.html">
 			Marching Cubes Paper</a>
-			<a href="https://github.com/maurizzzio/function-plot/">
-			Arbitrary Equation Plotting</a>
 		  </p>
 		</div>
 	</div>
-
-    <script>
-      //Send HTML Canvas info to javascript
-      var canvas = document.getElementById("c1");
-      //Draw Circle
-      mainJS(canvas)
-    </script>
-
+  <script type="text/javascript" src="marchingCubes.js"></script>
   </body>
 </html>
