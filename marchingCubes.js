@@ -12,23 +12,32 @@ Timeline:
 // Global Variables
 var canvas = document.querySelector('#paint');
 var ctx = canvas.getContext('2d');
-
 var sketch = document.querySelector('#sketch');
 var sketch_style = getComputedStyle(sketch);
 canvas.width = parseInt(sketch_style.getPropertyValue('width'));
 canvas.height = parseInt(sketch_style.getPropertyValue('height'));
+var radius = 10;
 var mouse = {
     x: 0,
     y: 0
 };
 var geometryLayer = []; // Stores geometric information for later manipulation
-var squares = [];
+var gridPoints = [];
 
+// Utility Functions
 function rgb(r, g, b, def) {
     def = parseInt(def, 10) || 0;
     return 'rgb(' + [(r || def), (g || def), (b || def)].join(',') + ')';
 }
 
+function testCase(caseNumber,input,expectedResult){
+  if (input === expectedResult){
+    console.log("Test case " + caseNumber + " passed!");
+  }
+  else{
+    console.log("Test case " + caseNumber + " failed!");
+  }
+}
 
 
 function createGrid(width, height, resolution) {
@@ -39,13 +48,20 @@ function createGrid(width, height, resolution) {
         for (x = 0; x < width; x += squareWidth) {
             ctx.fillStyle = rgb(0,0,0);
             ctx.fillRect(x, y, 5, 5);
+            gridPoints.push({x:x,y:y});
         }
     }
 }
 
 // Determines if a point with within a closed shape
-function pointInShape(point, shape) {
-    //TODO
+function pointInShape(p, s) {
+  d = Math.sqrt(Math.pow(2,s.x-p.x)+Math.pow(2,s.y-p.y));
+  if (d<radius){
+    return true;
+  }
+  else{
+    return false;
+  }
 }
 
 //
@@ -65,9 +81,9 @@ var onPaint = function() {
     ctx.fillStyle = 'black';
     ctx.strokeStyle = 'black';
 
-    geometryLayer.push([mouse.x, mouse.y]);
+    geometryLayer.push({x:mouse.x, y:mouse.y});
 
-    ctx.arc(mouse.x, mouse.y, 10, 0, 2 * Math.PI, false);
+    ctx.arc(mouse.x, mouse.y, radius, 0, 2 * Math.PI, false);
     ctx.fill();
     ctx.stroke();
     ctx.beginPath();
@@ -92,5 +108,12 @@ canvas.addEventListener('mouseup', function() {
 function mainJS() {
     console.log("Main ran");
     createGrid(canvas.width, canvas.height, 10);
+
+    // Test cases
+    tp = {x:1,y:1};
+    ts = {x:1,y:1};
+    testCase(1,pointInShape(tp, ts),true);
+    ts.x = 20;
+    testCase(2,pointInShape(tp, ts),false);
 }
 mainJS();
