@@ -36,6 +36,7 @@ function testCase(caseNumber,input,expectedResult){
   }
   else{
     console.log("Test case " + caseNumber + " failed!");
+    console.log(input);
   }
 }
 
@@ -53,11 +54,23 @@ function createGrid(width, height, resolution) {
     }
 }
 
+function distance(p,s){
+  x1 = p.x;
+  y1 = p.y;
+  x2 = s.x;
+  y2 = s.y;
+
+  a  = x2-x1;
+  b  = y2-y1;
+  aa = a*a;
+  bb = b*b;
+  d  = Math.sqrt(aa+bb);
+  return d;
+}
+
 // Determines if a point with within a closed shape
 function pointInShape(p, s) {
-  d = Math.sqrt(Math.pow(2,s.x-p.x)+Math.pow(2,s.y-p.y));
-  if (d<radius){
-    console.log(d + " " + radius);
+  if (distance(p,s) < radius){
     return true;
   }
   else{
@@ -65,7 +78,10 @@ function pointInShape(p, s) {
   }
 }
 
-//
+/*
+Approximates drawn volumetric data with a polygon around shadded parts
+  Assumes: No holes inside drawn shape.
+*/
 function marchingCubes() {
     createGrid(canvas.width, canvas.height, 10);
     // group grid into cubes
@@ -121,11 +137,11 @@ document.getElementById("clickMe").onclick = marchingCubes;
 
 function mainJS() {
     console.log("Main ran");
-    // Test cases
-    tp = {x:1,y:1};
-    ts = {x:1,y:1};
+    //Test cases
+    tp = {x:2,y:2};
+    ts = {x:0,y:0};
+    testCase(0,radius,10); // Expected results assume radius = 10
     testCase(1,pointInShape(tp, ts),true);
-    ts.x = 20;
-    testCase(2,pointInShape(tp, ts),false);
+    testCase(2,distance(tp,ts),2.8284271247461903);
 }
 mainJS();
