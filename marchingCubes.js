@@ -23,10 +23,10 @@ var mouse = {
 };
 var geometryLayer = []; // Stores geometric information for later manipulation
 var gridPoints = [];
-
+var cells = [];
 // Utility Functions
 function rgb(r, g, b, def) {
-    var def = parseInt(def, 10) || 0;
+    def = parseInt(def, 10) || 0;
     return 'rgb(' + [(r || def), (g || def), (b || def)].join(',') + ')';
 }
 
@@ -45,11 +45,29 @@ function createGrid(width, height, resolution) {
     var squareWidth = width / resolution;
     var squareHeight = height / resolution;
     var sc =0;
-    for (var y = 0; y < width; y += squareHeight) {
-        for (var x = 0; x < width; x += squareWidth) {
-            ctx.fillStyle = rgb(0,0,0);
-            ctx.fillRect(x, y, 5, 5);
-            gridPoints.push({x:x,y:y});
+    for (var i = 0; i < resolution; i +=2) {
+        for (var j = 0; j < resolution; j +=2) {
+            var x = i*squareWidth;
+            var y = j*squareHeight;
+            a = {x:x,y:y};
+            b = {x:x,y:y+squareHeight};
+            c = {x:x+squareWidth,y:y};
+            d = {x:x+squareWidth,y:y+squareHeight};
+            gridPoints.push(a);
+            gridPoints.push(b);
+            gridPoints.push(c);
+            gridPoints.push(d);
+            // Keep track of this square
+            cells.push({a:a,b:b,c:c,d:d});
+            // Draw with colors to illistrate the presence of squares
+            ctx.fillStyle = rgb(50,50,255);
+            ctx.fillRect(a.x, a.y, 5, 5);
+            ctx.fillStyle = rgb(0,150,150);
+            ctx.fillRect(b.x, b.y, 5, 5);
+            ctx.fillStyle = rgb(25,25,200);
+            ctx.fillRect(c.x, c.y, 5, 5);
+            ctx.fillStyle = rgb(100,25,150);
+            ctx.fillRect(d.x, d.y, 5, 5);
         }
     }
 }
@@ -78,7 +96,7 @@ function distance(p,s){
 
 // Determines if a point with within a closed shape
 function pointInShape(p, s) {
-  if (distance(p,s) < radius){
+  if (distance(p,s) <= radius){
     return true;
   }
   else{
@@ -92,7 +110,7 @@ function markPointsInShape(verticies,circleLocations){
     for (var j = 0; j < verticies.length; j++) {
       if (pointInShape(verticies[j], circleLocations[i])) {
         verticies[j].in = true;
-        ctx.fillStyle = rgb(255,0,0);
+        ctx.fillStyle = rgb(255,255,0);
         ctx.fillRect(verticies[j].x, verticies[j].y, 5, 5);
       }
     }
@@ -103,7 +121,7 @@ Approximates drawn volumetric data with a polygon around shadded parts
   Assumes: No holes inside drawn shape.
 */
 function marchingCubes() {
-    createGrid(canvas.width, canvas.height, 10);
+    createGrid(canvas.width, canvas.height, 20);
 
     markPointsInShape(gridPoints,geometryLayer);
     // select half way point
