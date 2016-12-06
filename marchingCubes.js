@@ -78,6 +78,18 @@ function pointInShape(p, s) {
   }
 }
 
+// Marks cube vertexes if in shaded area
+function markPointsInShape(verticies,circleLocations){
+  for (var i = 0; i < circleLocations.length; i++) {
+    for (var j = 0; j < verticies.length; j++) {
+      if (pointInShape(verticies[j], circleLocations[i])) {
+        verticies[j].in = true;
+        ctx.fillStyle = rgb(255,0,0);
+        ctx.fillRect(verticies[j].x, verticies[j].y, 5, 5);
+      }
+    }
+  }
+}
 /*
 Approximates drawn volumetric data with a polygon around shadded parts
   Assumes: No holes inside drawn shape.
@@ -85,17 +97,7 @@ Approximates drawn volumetric data with a polygon around shadded parts
 function marchingCubes() {
     createGrid(canvas.width, canvas.height, 10);
     // group grid into cubes
-    // which cube vertexes in shape
-    for (var i = 0; i < geometryLayer.length; i++) {
-      for (var j = 0; j < gridPoints.length; j++) {
-        if (pointInShape(gridPoints[j], geometryLayer[i])) {
-          gridPoints[j].in = true;
-          ctx.fillStyle = rgb(255,0,0);
-          ctx.fillRect(gridPoints[j].x, gridPoints[j].y, 5, 5);
-        }
-      }
-
-    }
+    markPointsInShape(gridPoints,geometryLayer);
     // select half way point
     // draw polygonalization
 }
