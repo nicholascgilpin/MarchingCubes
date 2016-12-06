@@ -26,7 +26,7 @@ var gridPoints = [];
 
 // Utility Functions
 function rgb(r, g, b, def) {
-    def = parseInt(def, 10) || 0;
+    var def = parseInt(def, 10) || 0;
     return 'rgb(' + [(r || def), (g || def), (b || def)].join(',') + ')';
 }
 
@@ -42,11 +42,11 @@ function testCase(caseNumber,input,expectedResult){
 
 
 function createGrid(width, height, resolution) {
-    squareWidth = width / resolution;
-    squareHeight = height / resolution;
-    sc =0;
-    for (y = 0; y < width; y += squareHeight) {
-        for (x = 0; x < width; x += squareWidth) {
+    var squareWidth = width / resolution;
+    var squareHeight = height / resolution;
+    var sc =0;
+    for (var y = 0; y < width; y += squareHeight) {
+        for (var x = 0; x < width; x += squareWidth) {
             ctx.fillStyle = rgb(0,0,0);
             ctx.fillRect(x, y, 5, 5);
             gridPoints.push({x:x,y:y});
@@ -55,18 +55,26 @@ function createGrid(width, height, resolution) {
 }
 
 function distance(p,s){
-  x1 = p.x;
-  y1 = p.y;
-  x2 = s.x;
-  y2 = s.y;
+  var x1 = p.x;
+  var y1 = p.y;
+  var x2 = s.x;
+  var y2 = s.y;
 
-  a  = x2-x1;
-  b  = y2-y1;
-  aa = a*a;
-  bb = b*b;
-  d  = Math.sqrt(aa+bb);
+  var a  = x2-x1;
+  var b  = y2-y1;
+  var aa = a*a;
+  var bb = b*b;
+  var d  = Math.sqrt(aa+bb);
   return d;
 }
+
+// Group grid into grid squares/rectangles
+// function rectVertexGrouping(grid){
+//   var squares = [];
+//   for (var i = 0; i < grid.length; i++) {
+//     var a = grid[i];
+//   }
+// }
 
 // Determines if a point with within a closed shape
 function pointInShape(p, s) {
@@ -96,7 +104,7 @@ Approximates drawn volumetric data with a polygon around shadded parts
 */
 function marchingCubes() {
     createGrid(canvas.width, canvas.height, 10);
-    // group grid into cubes
+
     markPointsInShape(gridPoints,geometryLayer);
     // select half way point
     // draw polygonalization
@@ -138,10 +146,10 @@ canvas.addEventListener('mouseup', function() {
 document.getElementById("clickMe").onclick = marchingCubes;
 
 function mainJS() {
-    console.log("Main ran");
     //Test cases
-    tp = {x:2,y:2};
-    ts = {x:0,y:0};
+    console.log("Main ran");
+    var tp = {x:2,y:2};
+    var ts = {x:0,y:0};
     testCase(0,radius,10); // Expected results assume radius = 10
     testCase(1,pointInShape(tp, ts),true);
     testCase(2,distance(tp,ts),2.8284271247461903);
