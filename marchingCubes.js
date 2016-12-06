@@ -57,6 +57,7 @@ function createGrid(width, height, resolution) {
 function pointInShape(p, s) {
   d = Math.sqrt(Math.pow(2,s.x-p.x)+Math.pow(2,s.y-p.y));
   if (d<radius){
+    console.log(d + " " + radius);
     return true;
   }
   else{
@@ -66,8 +67,19 @@ function pointInShape(p, s) {
 
 //
 function marchingCubes() {
+    createGrid(canvas.width, canvas.height, 10);
     // group grid into cubes
     // which cube vertexes in shape
+    for (var i = 0; i < geometryLayer.length; i++) {
+      for (var j = 0; j < gridPoints.length; j++) {
+        if (pointInShape(gridPoints[j], geometryLayer[i])) {
+          gridPoints[j].in = true;
+          ctx.fillStyle = rgb(255,0,0);
+          ctx.fillRect(gridPoints[j].x, gridPoints[j].y, 5, 5);
+        }
+      }
+
+    }
     // select half way point
     // draw polygonalization
 }
@@ -105,10 +117,10 @@ canvas.addEventListener('mouseup', function() {
     canvas.removeEventListener('mousemove', onPaint, false);
 }, false);
 
+document.getElementById("clickMe").onclick = marchingCubes;
+
 function mainJS() {
     console.log("Main ran");
-    createGrid(canvas.width, canvas.height, 10);
-
     // Test cases
     tp = {x:1,y:1};
     ts = {x:1,y:1};
