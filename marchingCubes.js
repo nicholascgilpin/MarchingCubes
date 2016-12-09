@@ -47,8 +47,8 @@ function createGrid(width, height, resolution) {
     var squareWidth = width / resolution;
     var squareHeight = height / resolution;
     var sc =0;
-    for (var i = 0; i < resolution; i +=2) {
-        for (var j = 0; j < resolution; j +=2) {
+    for (var i = 0; i < resolution; i++) {
+        for (var j = 0; j < resolution; j++) {
             var x = i*squareWidth;
             var y = j*squareHeight;
             var a = {x:x,y:y,in:false};
@@ -63,13 +63,13 @@ function createGrid(width, height, resolution) {
             cells.push({a:a,b:b,c:c,d:d});
             // Draw with colors to illistrate the presence of squares
             ctx.fillStyle = rgb(50,50,255);
-            ctx.fillRect(a.x, a.y, 5, 5);
+            ctx.fillRect(a.x, a.y, 1, 1);
             ctx.fillStyle = rgb(0,150,150);
-            ctx.fillRect(b.x, b.y, 5, 5);
+            ctx.fillRect(b.x, b.y, 1, 1);
             ctx.fillStyle = rgb(25,25,200);
-            ctx.fillRect(c.x, c.y, 5, 5);
+            ctx.fillRect(c.x, c.y, 1, 1);
             ctx.fillStyle = rgb(100,25,150);
-            ctx.fillRect(d.x, d.y, 5, 5);
+            ctx.fillRect(d.x, d.y, 1, 1);
         }
     }
 }
@@ -110,7 +110,6 @@ function determineCase(cell){
   if (cell.d.in){
     c = c | 8;
   }
-  console.log(c);
   return c;
 }
 
@@ -126,7 +125,8 @@ function approximateBoundry(cell){
   t = midpoint(a,c);
   b = midpoint(d,b);
   r = midpoint(d,c);
-  switch (determineCase(cell)) {
+  var c = determineCase(cell);
+  switch (c) {
       case 0:
       // 0 vertexes covered
       break;
@@ -183,6 +183,7 @@ function approximateBoundry(cell){
   ctx.fillStyle = 'red';
   ctx.strokeStyle = 'red';
   for (var i = 0; i < linesToDraw.length; i++) {
+    console.log("Drawing case " + c)
     ctx.beginPath();
     ctx.moveTo(linesToDraw[i][0].x,linesToDraw[i][0].y);
     ctx.lineTo(linesToDraw[i][1].x,linesToDraw[i][1].y);
@@ -191,7 +192,7 @@ function approximateBoundry(cell){
 }
 // Determines if a point with within a closed shape
 function pointInShape(p, s) {
-  sensitivity = 1;
+  sensitivity = 0;
   if (distance(p,s) <= radius+sensitivity){
     return true;
   }
@@ -207,7 +208,7 @@ function markPointsInShape(verticies,circleLocations){
       if (pointInShape(verticies[j], circleLocations[i])) {
         verticies[j].in = true;
         ctx.fillStyle = rgb(255,255,0);
-        ctx.fillRect(verticies[j].x, verticies[j].y, 5, 5);
+        ctx.fillRect(verticies[j].x, verticies[j].y, 1, 1);
       }
     }
   }
@@ -217,7 +218,7 @@ Approximates drawn volumetric data with a polygon around shadded parts
   Assumes: No holes inside drawn shape.
 */
 function marchingCubes() {
-    var resolution = 100; //20
+    var resolution = 4; //20
     createGrid(canvas.width, canvas.height, resolution);
     markPointsInShape(gridPoints,geometryLayer);
     for (var i = 0; i < cells.length; i++) {
