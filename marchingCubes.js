@@ -9,6 +9,7 @@ Timeline:
     select half way point
     draw polygonalization
 */
+
 // Global Variables
 var canvas = document.querySelector('#paint');
 var ctx = canvas.getContext('2d');
@@ -22,7 +23,7 @@ var mouse = {
     y: 0
 };
 var geometryLayer = []; // Stores geometric information for later manipulation
-var gridPoints = [];
+var gridPoints = []; // location of each grid vertix and if it is in a shape
 var cells = [];
 // Utility Functions
 function rgb(r, g, b, def) {
@@ -49,10 +50,10 @@ function createGrid(width, height, resolution) {
         for (var j = 0; j < resolution; j +=2) {
             var x = i*squareWidth;
             var y = j*squareHeight;
-            a = {x:x,y:y};
-            b = {x:x,y:y+squareHeight};
-            c = {x:x+squareWidth,y:y};
-            d = {x:x+squareWidth,y:y+squareHeight};
+            var a = {x:x,y:y,in:false};
+            var b = {x:x,y:y+squareHeight,in:false};
+            var c = {x:x+squareWidth,y:y,in:false};
+            var d = {x:x+squareWidth,y:y+squareHeight,in:false};
             gridPoints.push(a);
             gridPoints.push(b);
             gridPoints.push(c);
@@ -86,17 +87,28 @@ function distance(p,s){
   return d;
 }
 
-// Group grid into grid squares/rectangles
-// function rectVertexGrouping(grid){
-//   var squares = [];
-//   for (var i = 0; i < grid.length; i++) {
-//     var a = grid[i];
-//   }
-// }
+// Determines which of 16 configurations of vertex covers is active
+function determineCase(cell){
+  var c = 0;
+  if (cell.a.in){
+    c = c | 1;
+  }
+  if (cell.b.in){
+    c = c | 2;
+  }
+  if (cell.c.in){
+    c = c | 4;
+  }
+  if (cell.d.in){
+    c = c | 8;
+  }
+  return c;
+}
 
 // Determines if a point with within a closed shape
 function pointInShape(p, s) {
-  if (distance(p,s) <= radius){
+  sensitivity = 1;
+  if (distance(p,s) <= radius+sensitivity){
     return true;
   }
   else{
@@ -171,5 +183,6 @@ function mainJS() {
     testCase(0,radius,10); // Expected results assume radius = 10
     testCase(1,pointInShape(tp, ts),true);
     testCase(2,distance(tp,ts),2.8284271247461903);
+    testCase(3,determineCase({a:{in:true},b:{in:true},c:{in:true},d:{in:true}}),15);
 }
 mainJS();
