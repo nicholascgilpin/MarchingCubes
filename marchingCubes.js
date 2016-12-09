@@ -110,21 +110,22 @@ function determineCase(cell){
   if (cell.d.in){
     c = c | 8;
   }
+  console.log(c);
   return c;
 }
 
 // Draws a line between the midpoints of cell's/grid's walls
 // @TODO: Test this function!!!!!!!!!!!!!!!!!!!
-function approximateBoundry(cell,marchingCubesCase){
+function approximateBoundry(cell){
   var a = cell.a;
   var b = cell.b;
   var c = cell.c;
   var d = cell.d;
   linesToDraw = [];
-  t = midpoint(a,b);
-  l = midpoint(a,c);
-  r = midpoint(d,b);
-  b = midpoint(d,c);
+  l = midpoint(a,b);
+  t = midpoint(a,c);
+  b = midpoint(d,b);
+  r = midpoint(d,c);
   switch (determineCase(cell)) {
       case 0:
       // 0 vertexes covered
@@ -133,45 +134,45 @@ function approximateBoundry(cell,marchingCubesCase){
       linesToDraw.push([t,l]);
       break;
       case 2:
-      linesToDraw.push([t,r]);
+      linesToDraw.push([l,b]);
       break;
       case 3:
-      linesToDraw.push([b,l]);
+      linesToDraw.push([t,b]);
       break;
       case 4:
-      linesToDraw.push([b,r]);
+      linesToDraw.push([t,r]);
       break;
       case 5:
       linesToDraw.push([l,r]);
       break;
       case 6:
-      linesToDraw.push([t,b]);
+      linesToDraw.push([t,r]);
+      linesToDraw.push([b,l]);
       break;
       case 7:
-      linesToDraw.push([l,r]);
+      linesToDraw.push([b,r]);
       break;
       case 8:
-      linesToDraw.push([t,b]);
+      linesToDraw.push([b,r]);
       break;
       case 9:
       linesToDraw.push([t,l]);
       linesToDraw.push([b,r]);
       break;
       case 10:
-      linesToDraw.push([t,r]);
-      linesToDraw.push([b,l]);
+      linesToDraw.push([l,r]);
       break;
       case 11:
-      linesToDraw.push([t,l]);
-      break;
-      case 12:
       linesToDraw.push([t,r]);
       break;
+      case 12:
+      linesToDraw.push([t,b]);
+      break;
       case 13:
-      linesToDraw.push([b,r]);
+      linesToDraw.push([b,l]);
       break;
       case 14:
-      linesToDraw.push([b,l]);
+      linesToDraw.push([t,l]);
       break;
       case 15:
       // 4 vertexes covered
@@ -179,6 +180,8 @@ function approximateBoundry(cell,marchingCubesCase){
     default:
       console.log("Error: approximateBoundry failed");
   }
+  ctx.fillStyle = 'red';
+  ctx.strokeStyle = 'red';
   for (var i = 0; i < linesToDraw.length; i++) {
     ctx.beginPath();
     ctx.moveTo(linesToDraw[i][0].x,linesToDraw[i][0].y);
@@ -214,11 +217,12 @@ Approximates drawn volumetric data with a polygon around shadded parts
   Assumes: No holes inside drawn shape.
 */
 function marchingCubes() {
-    createGrid(canvas.width, canvas.height, 20);
-
+    var resolution = 100; //20
+    createGrid(canvas.width, canvas.height, resolution);
     markPointsInShape(gridPoints,geometryLayer);
-    // select half way point
-    // draw polygonalization
+    for (var i = 0; i < cells.length; i++) {
+      approximateBoundry(cells[i]);
+    }
 }
 
 // Painting Code //////////////////////////////////////////////////////////////
@@ -259,12 +263,12 @@ document.getElementById("clickMe").onclick = marchingCubes;
 function mainJS() {
     //Test cases
     console.log("Main ran");
-    var tp = {x:2,y:2};
-    var ts = {x:0,y:0};
-    testCase(0,radius,10); // Expected results assume radius = 10
-    testCase(1,pointInShape(tp, ts),true);
-    testCase(2,distance(tp,ts),2.8284271247461903);
-    testCase(3,determineCase({a:{in:true},b:{in:true},c:{in:true},d:{in:true}}),15);
-    testCase(4,midpoint({x:0,y:0},{x:0,y:2}).y,1);
+    // var tp = {x:2,y:2};
+    // var ts = {x:0,y:0};
+    // testCase(0,radius,10); // Expected results assume radius = 10
+    // testCase(1,pointInShape(tp, ts),true);
+    // testCase(2,distance(tp,ts),2.8284271247461903);
+    // testCase(3,determineCase({a:{in:true},b:{in:true},c:{in:true},d:{in:true}}),15);
+    // testCase(4,midpoint({x:0,y:0},{x:0,y:2}).y,1);
 }
 mainJS();
