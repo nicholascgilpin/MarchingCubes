@@ -37,6 +37,7 @@ function testCase(caseNumber,input,expectedResult){
   }
   else{
     console.log("Test case " + caseNumber + " failed!");
+    console.log("Failed output: ");
     console.log(input);
   }
 }
@@ -87,7 +88,14 @@ function distance(p,s){
   return d;
 }
 
+function midpoint(a,b){
+  return {x:(a.x+b.x)/2,y:(a.y+b.y)/2};
+}
+
 // Determines which of 16 configurations of vertex covers is active
+//  a---b
+//  |   |
+//  c---d
 function determineCase(cell){
   var c = 0;
   if (cell.a.in){
@@ -105,6 +113,79 @@ function determineCase(cell){
   return c;
 }
 
+// Draws a line between the midpoints of cell's/grid's walls
+// @TODO: Test this function!!!!!!!!!!!!!!!!!!!
+function approximateBoundry(cell,marchingCubesCase){
+  var a = cell.a;
+  var b = cell.b;
+  var c = cell.c;
+  var d = cell.d;
+  linesToDraw = [];
+  t = midpoint(a,b);
+  l = midpoint(a,c);
+  r = midpoint(d,b);
+  b = midpoint(d,c);
+  switch (determineCase(cell)) {
+      case 0:
+      // 0 vertexes covered
+      break;
+      case 1:
+      linesToDraw.push([t,l]);
+      break;
+      case 2:
+      linesToDraw.push([t,r]);
+      break;
+      case 3:
+      linesToDraw.push([b,l]);
+      break;
+      case 4:
+      linesToDraw.push([b,r]);
+      break;
+      case 5:
+      linesToDraw.push([l,r]);
+      break;
+      case 6:
+      linesToDraw.push([t,b]);
+      break;
+      case 7:
+      linesToDraw.push([l,r]);
+      break;
+      case 8:
+      linesToDraw.push([t,b]);
+      break;
+      case 9:
+      linesToDraw.push([t,l]);
+      linesToDraw.push([b,r]);
+      break;
+      case 10:
+      linesToDraw.push([t,r]);
+      linesToDraw.push([b,l]);
+      break;
+      case 11:
+      linesToDraw.push([t,l]);
+      break;
+      case 12:
+      linesToDraw.push([t,r]);
+      break;
+      case 13:
+      linesToDraw.push([b,r]);
+      break;
+      case 14:
+      linesToDraw.push([b,l]);
+      break;
+      case 15:
+      // 4 vertexes covered
+      break;
+    default:
+      console.log("Error: approximateBoundry failed");
+  }
+  for (var i = 0; i < linesToDraw.length; i++) {
+    ctx.beginPath();
+    ctx.moveTo(linesToDraw[i][0].x,linesToDraw[i][0].y);
+    ctx.lineTo(linesToDraw[i][1].x,linesToDraw[i][1].y);
+    ctx.stroke();
+  }
+}
 // Determines if a point with within a closed shape
 function pointInShape(p, s) {
   sensitivity = 1;
@@ -184,5 +265,6 @@ function mainJS() {
     testCase(1,pointInShape(tp, ts),true);
     testCase(2,distance(tp,ts),2.8284271247461903);
     testCase(3,determineCase({a:{in:true},b:{in:true},c:{in:true},d:{in:true}}),15);
+    testCase(4,midpoint({x:0,y:0},{x:0,y:2}).y,1);
 }
 mainJS();
