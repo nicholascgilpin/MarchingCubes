@@ -25,6 +25,7 @@ var mouse = {
 var geometryLayer = []; // Stores geometric information for later manipulation
 var gridPoints = []; // location of each grid vertix and if it is in a shape
 var cells = [];
+
 // Utility Functions
 function rgb(r, g, b, def) {
     def = parseInt(def, 10) || 0;
@@ -42,6 +43,11 @@ function testCase(caseNumber,input,expectedResult){
   }
 }
 
+// @TODO: Starting 2017, use escma6 promises and asybc functions instead
+function sleep(ms){
+    var waitUntil = new Date().getTime() + ms;
+    while(new Date().getTime() < waitUntil){}
+}
 
 function createGrid(width, height, resolution) {
     var squareWidth = width / resolution;
@@ -125,8 +131,7 @@ function approximateBoundry(cell){
   t = midpoint(a,c);
   b = midpoint(d,b);
   r = midpoint(d,c);
-  var c = determineCase(cell);
-  switch (c) {
+  switch (determineCase(cell)) {
       case 0:
       // 0 vertexes covered
       break;
@@ -183,7 +188,6 @@ function approximateBoundry(cell){
   ctx.fillStyle = 'red';
   ctx.strokeStyle = 'red';
   for (var i = 0; i < linesToDraw.length; i++) {
-    console.log("Drawing case " + c)
     ctx.beginPath();
     ctx.moveTo(linesToDraw[i][0].x,linesToDraw[i][0].y);
     ctx.lineTo(linesToDraw[i][1].x,linesToDraw[i][1].y);
@@ -218,7 +222,7 @@ Approximates drawn volumetric data with a polygon around shadded parts
   Assumes: No holes inside drawn shape.
 */
 function marchingCubes() {
-    var resolution = 4; //20
+    var resolution = 100; //20
     createGrid(canvas.width, canvas.height, resolution);
     markPointsInShape(gridPoints,geometryLayer);
     for (var i = 0; i < cells.length; i++) {
