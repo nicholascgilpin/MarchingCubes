@@ -249,8 +249,9 @@ var onPaint = function() {
 
 /* Mouse Capturing Work */
 canvas.addEventListener('mousemove', function(e) {
-    mouse.x = e.pageX - canvas.offsetLeft - 15;
-    mouse.y = e.pageY - canvas.offsetTop - 15;
+    var mouseCalibration = 0;
+    mouse.x = e.pageX - canvas.offsetLeft - mouseCalibration;
+    mouse.y = e.pageY - canvas.offsetTop - mouseCalibration;
 }, false);
 
 canvas.addEventListener('mousedown', function(e) {
