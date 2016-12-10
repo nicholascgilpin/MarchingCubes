@@ -69,13 +69,13 @@ function createGrid(width, height, resolution) {
             cells.push({a:a,b:b,c:c,d:d});
             // Draw with colors to illistrate the presence of squares
             ctx.fillStyle = rgb(50,50,255);
-            ctx.fillRect(a.x, a.y, 1, 1);
+            // ctx.fillRect(a.x, a.y, 1, 1);
             ctx.fillStyle = rgb(0,150,150);
-            ctx.fillRect(b.x, b.y, 1, 1);
+            // ctx.fillRect(b.x, b.y, 1, 1);
             ctx.fillStyle = rgb(25,25,200);
-            ctx.fillRect(c.x, c.y, 1, 1);
+            // ctx.fillRect(c.x, c.y, 1, 1);
             ctx.fillStyle = rgb(100,25,150);
-            ctx.fillRect(d.x, d.y, 1, 1);
+            // ctx.fillRect(d.x, d.y, 1, 1);
         }
     }
 }
@@ -211,8 +211,8 @@ function markPointsInShape(verticies,circleLocations){
     for (var j = 0; j < verticies.length; j++) {
       if (pointInShape(verticies[j], circleLocations[i])) {
         verticies[j].in = true;
-        ctx.fillStyle = rgb(255,255,0);
-        ctx.fillRect(verticies[j].x, verticies[j].y, 1, 1);
+        // ctx.fillStyle = rgb(255,255,0);
+        // ctx.fillRect(verticies[j].x, verticies[j].y, 1, 1);
       }
     }
   }
@@ -234,6 +234,13 @@ function marchingCubes() {
 /* Painting code based on a tutorial by Rishabh
 http://codetheory.in/creating-a-paint-application-with-html5-canvas/
 */
+function clear(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  gridPoints = [];
+  geometryLayer = [];
+  cells = [];
+}
+
 var onPaint = function() {
     ctx.lineWidth = 1;
     ctx.fillStyle = 'black';
@@ -246,6 +253,10 @@ var onPaint = function() {
     ctx.stroke();
     ctx.beginPath();
 };
+
+function activedBtn(){
+  document.getElementById("activate").className = "btn btn-success";
+}
 
 /* Mouse Capturing Work */
 canvas.addEventListener('mousemove', function(e) {
@@ -264,8 +275,9 @@ canvas.addEventListener('mouseup', function() {
     canvas.removeEventListener('mousemove', onPaint, false);
 }, false);
 
-document.getElementById("clickMe").onclick = marchingCubes;
-
+/* User Interface Buttons*/
+document.getElementById("activate").onclick = marchingCubes;
+document.getElementById("reset").onclick = clear;
 function mainJS() {
     //Test cases
     console.log("Main ran");
