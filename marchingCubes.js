@@ -193,6 +193,7 @@ function markPointsInShape(verticies,circleLocations){
 // EventListener:
 // Approximates drawn volumetric data with a polygon around shadded parts
 function marchingCubes() {
+    console.log('ran');
     var resolution = 100; //20
     createGrid(canvas.width, canvas.height, resolution, false);
     markPointsInShape(gridPoints,geometryLayer);
@@ -229,8 +230,13 @@ var onPaint = function() {
 
 //Callback: Turns activate green if marchingCubes ran
 function activedBtn(){
+  console.log(gridPoints);
   if (gridPoints.length > 0) {
     document.getElementById("activate").className = "btn btn-success";
+  }
+  else{
+    document.getElementById("activate").className = "btn btn-primary";
+
   }
 }
 
@@ -252,8 +258,13 @@ canvas.addEventListener('mouseup', function() {
 }, false);
 
 /* User Interface Callbacks*/
-document.getElementById("activate").onclick = marchingCubes;
-document.getElementById("reset").onclick = clear;
+var activateBtn = document.getElementById("activate");
+activateBtn.addEventListener('click',marchingCubes,false);
+activateBtn.addEventListener('click',activedBtn,false);
+
+var resetBtn = document.getElementById("reset");
+resetBtn.addEventListener('click',clear,false);
+resetBtn.addEventListener('click',activedBtn,false);
 
 // Testing Code ////////////////////////////////////////////////////////////////
 function testCase(caseNumber,input,expectedResult){
